@@ -12,19 +12,20 @@ from pyrogram.errors import (
     PhoneCodeInvalid, PhoneCodeExpired
 )
 
-API_TEXT = """Hi, {}.
-This is Pyrogram's String Session Generator Bot. I will generate String Session of your Telegram Account.
+API_TEXT = """Hola, {}.
+Este es el bot generador de sesiones de cadena de Pyrogram. Generaré String Session de tu cuenta de Telegram.
 
-By @InFoJosTel
+Por @InFoJosTel
 
-Now send your `API_ID` same as `APP_ID` to Start Generating Session.
+Ahora envíe su `API_ID` igual que` APP_ID` para comenzar a generar sesión.
 
-Get `APP_ID` from https://my.telegram.org or @UseTGzKBot."""
-HASH_TEXT = "Now send your `API_HASH`.\n\nGet `API_HASH` from https://my.telegram.org Or @UseTGzKBot.\n\nPress /cancel to Cancel Task."
+Obtenga `APP_ID` de https://my.telegram.org o @UseTGzKBot."""
+
+HASH_TEXT = "Ahora envía tu `API_HASH`.\n\nObtener `API_HASH` desde https://my.telegram.org O @UseTGzKBot.\n\nPreciona /cancel cancelar tarea."
 PHONE_NUMBER_TEXT = (
-    "Now send your Telegram account's Phone number in International Format. \n"
-    "Including Country code. Example: **+14154566376**\n\n"
-    "Press /cancel to Cancel Task."
+    "Ahora envíe el número de teléfono de su cuenta de Telegram en formato internacional. \n"
+    "Incluido el código de país. Ejemplo: **+14154566376**\n\n"
+    "Preciona /cancel cancelar tarea."
 )
 
 @bot.on_message(filters.private & filters.command("start"))
@@ -38,14 +39,14 @@ async def genStr(_, msg: Message):
     try:
         check_api = int(api.text)
     except Exception:
-        await msg.reply("`API_ID` is Invalid.\nPress /start to Start again.")
+        await msg.reply("`API_ID` is Invalid.\nPreciona /start to Start again.")
         return
     api_id = api.text
     hash = await bot.ask(chat.id, HASH_TEXT)
     if await is_cancel(msg, hash.text):
         return
     if not len(hash.text) >= 30:
-        await msg.reply("`API_HASH` is Invalid.\nPress /start to Start again.")
+        await msg.reply("`API_HASH` is Invalid.\nPreciona /start to Start again.")
         return
     api_hash = hash.text
     while True:
@@ -63,7 +64,7 @@ async def genStr(_, msg: Message):
     try:
         client = Client("my_account", api_id=api_id, api_hash=api_hash)
     except Exception as e:
-        await bot.send_message(chat.id ,f"**ERROR:** `{str(e)}`\nPress /start to Start again.")
+        await bot.send_message(chat.id ,f"**ERROR:** `{str(e)}`\nPreciona /start to Start again.")
         return
     try:
         await client.connect()
@@ -77,10 +78,10 @@ async def genStr(_, msg: Message):
         await msg.reply(f"You have Floodwait of {e.x} Seconds")
         return
     except ApiIdInvalid:
-        await msg.reply("API ID and API Hash are Invalid.\n\nPress /start to Start again.")
+        await msg.reply("API ID and API Hash are Invalid.\n\nPreciona /start to Start again.")
         return
     except PhoneNumberInvalid:
-        await msg.reply("Your Phone Number is Invalid.\n\nPress /start to Start again.")
+        await msg.reply("Your Phone Number is Invalid.\n\nPreciona /start to Start again.")
         return
     try:
         otp = await bot.ask(
@@ -107,11 +108,11 @@ async def genStr(_, msg: Message):
         try:
             two_step_code = await bot.ask(
                 chat.id, 
-                "Your account have Two-Step Verification.\nPlease enter your Password.\n\nPress /cancel to Cancel.",
+                "Your account have Two-Step Verification.\nPlease enter your Password.\n\nPreciona /cancel to Cancel.",
                 timeout=300
             )
         except TimeoutError:
-            await msg.reply("`Time limit reached of 5 min.\n\nPress /start to Start again.`")
+            await msg.reply("`Time limit reached of 5 min.\n\nPreciona /start to Start again.`")
             return
         if await is_cancel(msg, two_step_code.text):
             return
